@@ -1,31 +1,29 @@
-const express = require("express");
-const app = express();
+const express = require('express')
+const app = express()
 
-app.use(express.json());
+app.use(express.json())
 
+let todos = []
 
-// Home API
-app.get("/", (req, res) => {
-  res.send("API Running Successfully 🚀");
-});
+// Add todo
+app.post('/todos', (req,res)=>{
+  const todo = {
+    id: Date.now(),
+    text: req.body.text
+  }
+  todos.push(todo)
+  res.json(todo)
+})
 
-// Example API
-app.get("/api/user", (req, res) => {
-  res.json({
-    name: "Arfat",
-    skill: "Backend Developer"
-  });
-});
+// Get todos
+app.get('/todos', (req,res)=>{
+  res.json(todos)
+})
 
-// POST API Example
-app.post("/api/login", (req, res) => {
-  const { username } = req.body;
-  res.json({
-    message: `Welcome ${username}`
-  });
-});
+// Delete todo
+app.delete('/todos/:id', (req,res)=>{
+  todos = todos.filter(t => t.id != req.params.id)
+  res.json({message:"Deleted"})
+})
 
-
-app.listen(5000, () => {
-  console.log("Server running on http://localhost:5000");
-});
+app.listen(3000, ()=> console.log("Server running"))
